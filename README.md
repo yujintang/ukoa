@@ -1,0 +1,91 @@
+# UKOA (Node.js 服务器框架)
+
+## Install
+
+```shell
+npm install ukoa
+```
+
+## Use
+
+```js
+const { Ufo } = require('ukoa');
+
+const runServer = async () => {
+  const ufo = new Ufo({
+    baseDir: __dirname,
+    apiDir: './api',
+    configDir: './config/.env.json',
+    consul_type: '',
+    consul_category: '',
+  });
+  await ufo.init();
+  await ufo.start();
+};
+
+runServer();
+```
+## Documents
+### UFO 提供一下常用模块
+> 避免重复依赖，常用模块请使用ufo提供的.
+```js
+const {Ufo, Controller, Joi, lodash, moment} = require('ukoa');
+```
+
+### UFO 内置中间价
+> ufo 内置集成以下中间价
+```js
+systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, 
+```
+
+### api-gateway 项目
+> 若是api-gateway项目,请开启以下配置
+```js
+ufo.proxy = true
+```
+
+### 中间件
+> 全局中间件
+```
+ufo.use(fn);
+```
+> 本项目动态路由action中间件
+```js
+ufo.dynamicMv(fn);
+```
+```
+
+### 路由router
+> ufo 提供一下路由文件,可使用 ufo.router 方法添加其他路由文件。
+ctx.path === '/'的请求, 会根据请求字段'Action'去智能匹配到以下路由['/proxy/:app/:Action', '/dynamic/:Action'].
+```js
+ufo.router
+  .get('/HeartBeat', mv)
+  .get('/Restart', mv)
+  .all('/proxy/:app/:Action', mv)
+  .all('/dynamic/:Action', mv)
+```
+
+### ufo.init
+> 初始化配置文件、挂载action、挂载中间件等操作，可传入参数配置
+```js
+ufo.init({
+  mv: {
+    'systemCatch': {},
+    'koa2-cors': {},
+    'koa-json': {},
+    'koa-bodyparser':{},
+    'changeRoutePath':{},
+    'mergeParams':{},
+    'checkResponse':{},
+    'checkAction':{},
+  }
+})
+默认配置如下:
+ufo.init({
+  mv: {
+    'koa2-cors': { origin: ctx => ctx.headers.origin, credentials: true },
+    'koa-bodyparser': { formLimit: '50mb', jsonLimit: '50mb' }
+  }
+})
+```
