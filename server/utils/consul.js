@@ -11,7 +11,7 @@ class Consul {
     this.consul_version = this.config.consul_version;
     this.key_path = `${this.consul_type}/${this.consul_category}/${this.consul_version}`;
     this.env = this.config.env;
-    if (this.env === 'production') assert(this.consul_type && this.consul_category && this.consul_version, 'ufo: Consul 缺少参数[consul_type、consul_category、consul_version]!');
+    if (this.env === 'production') assert(this.consul_url && this.consul_token && this.consul_type && this.consul_category && this.consul_version, 'ufo: Consul 缺少参数[consul_url, consul_token, consul_type、consul_category、consul_version]!');
   }
 
   async base(data, config = {}) {

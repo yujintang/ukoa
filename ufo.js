@@ -15,8 +15,8 @@ class Ufo extends KoaApplication {
   } = {}) {
     super();
     this.baseDir = baseDir || process.cwd(); // 系统根目录
-    this.apiDir = apiDir || './api'; // API存放目录
-    this.configDir = configDir || './config/.env.json'; // 配置文件存放目录
+    this.apiDir = apiDir || './server/api'; // API存放目录
+    this.configDir = configDir || './server/config/.env.json'; // 配置文件存放目录
     assert(typeof this.baseDir === 'string', 'ufo: base_dir must be a string!');
     this.helper = helper;
     this.dynamicMv = [];

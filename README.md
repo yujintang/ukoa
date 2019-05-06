@@ -14,8 +14,8 @@ const { Ufo } = require('ukoa');
 const runServer = async () => {
   const ufo = new Ufo({
     baseDir: __dirname,
-    apiDir: './api',
-    configDir: './config/.env.json',
+    consul_url: '',
+    consul_token: '',
     consul_type: '',
     consul_category: '',
   });
@@ -26,20 +26,20 @@ const runServer = async () => {
 runServer();
 ```
 ## Documents
-### UFO 提供一下常用模块
-> 避免重复依赖，常用模块请使用ufo提供的.
+### UKOA 提供一下常用模块
+> 避免重复依赖，常用模块请使用ukoa提供的.
 ```js
 const {Ufo, Controller, Joi, lodash, moment} = require('ukoa');
 ```
 
-### UFO 内置中间价
+### UKOA 内置中间价
 > ufo 内置集成以下中间价
 ```js
-systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, 
+systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, checkResponse
 ```
 
-### api-gateway 项目
-> 若是api-gateway项目,请开启以下配置
+### gateway 项目
+> 若是gateway项目,请开启以下配置
 ```js
 ufo.proxy = true
 ```
@@ -56,7 +56,7 @@ ufo.dynamicMv(fn);
 ```
 
 ### 路由router
-> ufo 提供一下路由文件,可使用 ufo.router 方法添加其他路由文件。
+> ukoa 提供一下路由文件,可使用 ufo.router 方法添加其他路由文件。
 ctx.path === '/'的请求, 会根据请求字段'Action'去智能匹配到以下路由['/proxy/:app/:Action', '/dynamic/:Action'].
 ```js
 ufo.router
