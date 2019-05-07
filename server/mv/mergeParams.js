@@ -18,7 +18,7 @@ const mergeParams = (options = {}) => async (ctx, next) => {
 
   // 添加其他信息
   const additional = {
-    ip: ctx.header['x-forwarded-for'],
+    ip: ctx.header['x-forwarded-for'] || ctx.header.host,
     method: ctx.method,
     token: ctx.cookies.get('token') || ctx.cookies.get('INNER_AUTH_TOKEN') || ctx.mergeParams.auth_token,
   };
