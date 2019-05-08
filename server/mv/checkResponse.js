@@ -1,4 +1,6 @@
 const humpsClient = require('humps');
+const debug = require('debug')('ufo:checkResponse');
+
 /**
  * 规范输出字段中间件
  * @param {*} ctx
@@ -6,6 +8,7 @@ const humpsClient = require('humps');
  */
 const checkResponse = (options = {}) => async (ctx, next) => {
   await next();
+  debug(`Req: ${JSON.stringify(ctx.body, null, '    ')}`);
   const { stdout, humps } = Object.assign({
     stdout: {
       Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1,
@@ -26,6 +29,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
   }
 
   if (ctx.body) Object.keys(ctx.body).forEach((key) => { if (!stdout[key]) delete ctx.body[key]; });
+  debug(`Res: ${JSON.stringify(ctx.body, null, '    ')}`);
 };
 
 module.exports = checkResponse;

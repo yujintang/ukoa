@@ -12,7 +12,7 @@ const curl = async (url, data, config = {}) => {
     }, config);
     debug(`Req: ${JSON.stringify(entity, null, '    ')}`);
     const res = await axios(entity);
-    debug(`Res: ${res.data, null, '    '}`);
+    debug(`Res: ${JSON.stringify(res.data, null, '    ')}`);
     return [res.data, false];
   } catch (err) {
     console.error(`ufo: curl Error, \t${err.message}\n${err.stack}`);

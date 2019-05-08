@@ -89,3 +89,13 @@ ufo.init({
   }
 })
 ```
+### DEBUG
+> env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
+```shell
+# 打印所有log
+DEBUG: ufo.*
+# 打印其他
+DEBUG: ufo.curl
+DEBUG: ufo.checkResponse
+DEBUG: ufo.mergeParams
+```

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const assert = require('assert');
+const debug = require('debug')('ufo:consul');
 
 class Consul {
   constructor(config = {}) {
@@ -18,14 +19,17 @@ class Consul {
     // 非prod环境，无需进行consul
     if (this.env !== 'production') return [{}, false];
     try {
-      const res = await axios(Object.assign({
+      const entity = Object.assign({
         timeout: 8000,
         method: 'post',
         url: this.consul_url,
         data: Object.assign({
           token: this.consul_token,
         }, data),
-      }, config));
+      }, config);
+      debug(`Req: ${JSON.stringify(entity, null, '    ')}`);
+      const res = await axios(entity);
+      debug(`Res: ${JSON.stringify(res.data, null, '    ')}`);
       const { ret_code = -1, message, Message } = res.data;
       if (ret_code !== 0) throw new Error(message || Message);
       return [res.data, false];

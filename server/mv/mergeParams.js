@@ -1,10 +1,13 @@
 const { v4 } = require('uuid');
+const { pick } = require('lodash');
+const debug = require('debug')('ufo:mergeParams');
 /**
  * 聚合参数中间件
  * @param {*} ctx
  * @param {*} next
  */
 const mergeParams = (options = {}) => async (ctx, next) => {
+  debug(`Req: ${JSON.stringify(pick(ctx.request, ['body', 'query']), null, '    ')}`);
   ctx.mergeParams = Object.assign(
     options.mergeParams || {},
     ctx.request.body,
@@ -24,6 +27,7 @@ const mergeParams = (options = {}) => async (ctx, next) => {
   };
 
   if (ctx.app.proxy) Object.assign(ctx.mergeParams, additional);
+  debug(`Res: ${JSON.stringify(ctx.mergeParams, null, '     ')}`);
   await next();
 };
 
