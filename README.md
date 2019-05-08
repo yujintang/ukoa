@@ -98,4 +98,5 @@ DEBUG: ufo.*
 DEBUG: ufo.curl
 DEBUG: ufo.checkResponse
 DEBUG: ufo.mergeParams
+DEBUG: ufo.consul
 ```
