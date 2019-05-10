@@ -1,5 +1,7 @@
 const heartBeat = async (ctx) => {
-  const { config } = ctx.app;
+  const { config, consul } = ctx.app;
+  const newConfig = await consul.ConfigurationDiscovery();
+  if (config.version !== newConfig.version) ctx.status = 506;
   ctx.body = [{
     api_name: config.api_name,
     api_type: config.type,
