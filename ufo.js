@@ -84,6 +84,7 @@ class Ufo extends KoaApplication {
     this.router
       .get('/HeartBeat', require('./server/routers/heartBeat'))
       .get('/Restart', require('./server/routers/restart'))
+      .all('/docs/:Action', require('./server/routers/docs'))
       .all('/dynamic/:Action', compose([].concat(
         this.dynamicMv,
         require('./server/routers/dynamicAction'),
