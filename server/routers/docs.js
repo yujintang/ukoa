@@ -25,7 +25,7 @@ const docs = async (ctx) => {
           hostname,
           pathname,
           query: Object.assign({}, query, {
-            Action: query.Action + Action,
+            Action: query.Action + api.action,
           }),
         }),
       };
