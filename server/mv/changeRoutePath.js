@@ -12,7 +12,7 @@ const changeRoutePath = () => async (ctx, next) => {
     const __view_docs = _.get(ctx, 'request.body.__view_docs') || _.get(ctx, 'request.query.__view_docs') || false;
     const actionSplit = Action.split('.');
     if (actionSplit.length === 1) {
-      const preFix = __view_docs ? 'dynamic' : 'docs';
+      const preFix = __view_docs ? 'docs' : 'dynamic';
       ctx.routerPath = `/${preFix}/${actionSplit[0]}`;
     }
     if (actionSplit.length === 2) ctx.routerPath = `/proxy/${actionSplit[0]}/${actionSplit[1]}`;
