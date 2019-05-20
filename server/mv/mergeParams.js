@@ -1,6 +1,8 @@
 const { v4 } = require('uuid');
 const { pick } = require('lodash');
 const debug = require('debug')('ufo:mergeParams');
+const shortid = require('shortid');
+
 /**
  * 聚合参数中间件
  * @param {*} ctx
@@ -18,6 +20,7 @@ const mergeParams = (options = {}) => async (ctx, next) => {
   ctx.mergeParams.Action = Action || action;
   delete ctx.mergeParams.action;
   if (!ctx.mergeParams.TrackSN) ctx.mergeParams.TrackSN = v4();
+  if (!ctx.mergeParams.ChainSN) ctx.mergeParams.ChainSN = shortid.generate();
 
   // 添加其他信息
   const additional = {

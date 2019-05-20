@@ -1,6 +1,6 @@
 {
   "name": "ukoa",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./",
@@ -31,6 +31,7 @@
     "koa2-cors": "^2.0.6",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "shortid": "^2.2.14",
     "uuid": "^3.3.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.6.0"
