@@ -11,7 +11,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
   debug(`Req: ${JSON.stringify(ctx.body, null, '    ')}`);
   const { stdout, humps, onlyController } = Object.assign({
     stdout: {
-      Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1,
+      Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1, ChainSN: 1,
     },
     onlyController: true,
   }, options);
