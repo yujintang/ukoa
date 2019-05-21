@@ -8,7 +8,11 @@ const dynamicAction = async (ctx) => {
     // 验证参数
     api.validate();
     // 执行函数体
-    await api.process();
+    if (api.cache) {
+      await api.cacheProcess(api.ctx);
+    } else {
+      await api.process(api.ctx);
+    }
     api.ctxBody();
   } catch (err) {
     ctx.app.logger.error(err);

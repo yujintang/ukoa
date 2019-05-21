@@ -2,7 +2,7 @@ const heartBeat = async (ctx) => {
   const { config, consul } = ctx.app;
   const newConfig = await consul.ConfigurationDiscovery();
   if (config.version !== newConfig.version) ctx.status = 506;
-  ctx.body = [{
+  ctx.body = {
     api_name: config.api_name,
     api_type: config.type,
     api_version: config.version,
@@ -12,7 +12,7 @@ const heartBeat = async (ctx) => {
     api_port: config.port,
     api_up_time: config.api_up_time,
     api_path: config.base_dir,
-  }, false];
+  };
 };
 
 module.exports = heartBeat;

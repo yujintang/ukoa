@@ -1,16 +1,20 @@
 const Joi = require('joi');
+const { get } = require('lodash');
+const curl = require('./curl');
 
 const SymbolError = Symbol('error');
 /**
  * 用于动态路由继承
  */
 class Controller {
-  constructor(ctx = { app: {} }, schema) {
+  constructor(ctx = { app: {} }, schema = {}) {
     this.ctx = ctx;
+    this.baseSchema = schema;
     this.Joi = Joi;
+    this.init(this.ctx, this.joi);
+    this.checkParams = this.init; // 兼容前期写法
     this.helper = ctx.app.helper;
     this.params = ctx.mergeParams;
-    schema ? (this.schema = schema) : this.checkParams();
     this.ok = {};
     this.error = SymbolError;
   }
@@ -28,10 +32,12 @@ class Controller {
   }
 
   /**
-   * Joi 结构体
+   * 初始化数据
    */
-  checkParams() {
-    this.schema = {};
+  init() {
+    this.schema = this.baseSchema;
+    this.cache = false;
+    this.docs = {};
   }
 
   /**
@@ -42,17 +48,30 @@ class Controller {
   }
 
   /**
-   * 设置mock数据
+   * 缓存函数体
    */
-  setMocks() {
-    this.mock = {};
-  }
-
-  /**
-   * 设置DOC
-   */
-  setDocs() {
-    this.docs = {};
+  async cacheProcess() {
+    const { url, token } = get(this.ctx.app.config, 'cache_api', {});
+    const nameSpace = get(this.ctx.app, 'consul_category', '');
+    const [data, err] = await curl(url, {
+      Action: 'Common.GetApiCache',
+      Token: token,
+      Namespace: nameSpace,
+      Params: this.params,
+    });
+    if (err || data) {
+      this.process(this.ctx);
+      if (this.error !== SymbolError) return;
+      curl(url, {
+        Action: 'Common.SetApiCache',
+        Token: token,
+        Namespace: nameSpace,
+        Params: this.params,
+        Values: data,
+      });
+    } else {
+      this.ok = data;
+    }
   }
 
   /**

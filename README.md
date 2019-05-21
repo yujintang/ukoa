@@ -89,6 +89,14 @@ ufo.init({
   }
 })
 ```
+### cache
+> 需在config里面配置 cache_api:{url, token} 并且在 controller init() 函数里面，讲cache = true
+```
+init(){
+  this.cache = true;
+  this.schema = {}; //交验参数
+}
+```
 ### DEBUG
 > env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
 ```shell

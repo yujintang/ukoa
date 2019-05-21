@@ -26,6 +26,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       Action: `${ctx.mergeParams.Action || ''}Response`,
       RetCode: err ? -1 : 0,
       TrackSN: ctx.mergeParams.TrackSN,
+      ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
       Message: err ? data : 'Ok!',
     };
