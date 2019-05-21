@@ -37,12 +37,12 @@ const docs = async (ctx) => {
     const joi2md = new Joi2md({ Action: Joi.string().default(Action).required() });
     joi2md.concatSchema(api.schema);
     console.log(joi2md.printMd());
-    return ctx.body = {
+    return ctx.body = Object.assign(api.docs, {
       API名称: Action,
       功能概述: actionObj[Action].desc,
       请求参数: joi2md.printMd().split('\n'),
       请求json: joi2md.printJson(),
-    };
+    });
   } catch (err) {
     ctx.app.logger.error(err);
     return ctx.body = [err.message, true];

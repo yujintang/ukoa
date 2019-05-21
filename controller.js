@@ -49,6 +49,13 @@ class Controller {
   }
 
   /**
+   * 设置DOC
+   */
+  setDocs() {
+    this.docs = {};
+  }
+
+  /**
    * 返回体
    * response {array} [data, err ] 第一个参数为是具体内容, 第二个参数为是否错误
    */
