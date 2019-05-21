@@ -95,7 +95,7 @@ class Ufo extends KoaApplication {
       .use(this.router.allowedMethods());
 
     // start app
-    this.listen(this.config.port, async () => {
+    this.listen(this.config.port || 3000, async () => {
       // 服务注册
       if (this.env === 'production') await this.consul.ServiceRegistry(this.config);
       console.info(`\n\nufo: api_env: ${this.config.api_env}`);

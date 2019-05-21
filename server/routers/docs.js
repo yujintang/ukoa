@@ -13,21 +13,12 @@ const docs = async (ctx) => {
   const actionObj = requireFileMulti(path.join(process.cwd(), ctx.app.apiDir));
   const summary = {};
   if (!Api) {
-    const {
-      protocol = 'http', hostname = 'example.com', pathname = '', query = {},
-    } = get(ctx, 'app.config.docs', {});
+    const doc_url = get(ctx, 'app.config.doc_url', 'https://docs.example.com/?Action=xx.');
     for (const i in actionObj) {
       const api = actionObj[i];
       summary[`${api.action}`] = {
         desc: api.desc,
-        url: url.format({
-          protocol,
-          hostname,
-          pathname,
-          query: Object.assign({}, query, {
-            Action: query.Action + api.action,
-          }),
-        }),
+        url: `${doc_url}${api.action}`,
       };
     }
     return ctx.body = summary;
