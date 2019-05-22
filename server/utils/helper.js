@@ -64,6 +64,7 @@ const uuidV4 = (replace = true, char = '') => {
 };
 
 module.exports = {
+  normalize,
   generateHash,
   generateHmac,
   requireFileMulti,
