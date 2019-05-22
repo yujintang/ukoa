@@ -10,29 +10,29 @@ const sortObj = (obj) => {
   return res;
 };
 
-const normalize = (input) => {
+const normalize = (input, sep, eq, options) => {
   if (typeof input === 'string') {
     return input;
   }
-  return qs.stringify(sortObj(input));
+  return qs.stringify(sortObj(input), sep, eq, options);
 };
 
 /**
  * hash生成
  * @param {*} algorithm // md5，sha1 ...
  */
-const generateHash = algorithm => (payload) => {
-  const hmac = crypto.createHash(algorithm);
-  return hmac.update(normalize(payload), 'utf8').digest('hex');
+const generateHash = (algorithm, options) => (payload, sep, eq, opt) => {
+  const hmac = crypto.createHash(algorithm, options);
+  return hmac.update(normalize(payload, sep, eq, opt), 'utf8').digest('hex');
 };
 
 /**
  * hmac 生成
  * @param {*} algorithm
  */
-const generateHmac = algorithm => (payload, secret) => {
-  const hmac = crypto.createHmac(algorithm, secret);
-  return hmac.update(normalize(payload), 'utf8').digest('hex');
+const generateHmac = (algorithm, secret, options) => (payload, sep, eq, opt) => {
+  const hmac = crypto.createHmac(algorithm, secret, options);
+  return hmac.update(normalize(payload, sep, eq, opt), 'utf8').digest('hex');
 };
 
 // 批量加载文件
