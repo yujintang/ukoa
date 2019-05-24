@@ -9,9 +9,9 @@ const dynamicAction = async (ctx) => {
     api.validate();
     // 执行函数体
     if (api.cache) {
-      await api.cacheProcess(api.ctx);
+      await api.cacheMain(api.ctx);
     } else {
-      await api.process(api.ctx);
+      await api.main(api.ctx);
     }
     api.ctxBody();
   } catch (err) {

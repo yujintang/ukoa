@@ -11,8 +11,9 @@ class Controller {
     this.ctx = ctx;
     this.baseSchema = schema;
     this.Joi = Joi;
+    if (this.checkParams) this.init = this.checkParams;
+    if (this.process) this.main = this.process;
     this.init(this.ctx, this.joi);
-    this.checkParams = this.init; // 兼容前期写法
     this.helper = ctx.app.helper;
     this.params = ctx.mergeParams;
     this.ok = {};
@@ -43,14 +44,14 @@ class Controller {
   /**
    * 函数体
    */
-  async process() {
+  async main() {
     this.ok = {};
   }
 
   /**
    * 缓存函数体
    */
-  async cacheProcess() {
+  async cacheMain() {
     const { url, token } = get(this.ctx.app.config, 'cache_api', {});
     const nameSpace = get(this.ctx.app, 'consul_category', '');
     const [data, err] = await curl(url, {
@@ -60,7 +61,7 @@ class Controller {
       Params: this.params,
     });
     if (err || data) {
-      this.process(this.ctx);
+      await this.main(this.ctx);
       if (this.error !== SymbolError) return;
       curl(url, {
         Action: 'Common.SetApiCache',
