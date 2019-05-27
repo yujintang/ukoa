@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')();
 
 const restart = async () => {
   logger.info('ufo: restart api makes service closed!');

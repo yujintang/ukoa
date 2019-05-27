@@ -1,6 +1,6 @@
 const axios = require('axios');
 const debug = require('debug')('ufo:curl');
-const logger = require('./server/utils/logger');
+const logger = require('./server/utils/logger')();
 
 const curl = async (url, data, config = {}) => {
   try {

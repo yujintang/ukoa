@@ -1,7 +1,7 @@
 const axios = require('axios');
 const assert = require('assert');
 const debug = require('debug')('ufo:consul');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')();
 
 class Consul {
   constructor(config = {}) {

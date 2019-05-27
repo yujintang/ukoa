@@ -3,7 +3,7 @@ const qs = require('querystring');
 const fs = require('fs-extra');
 const path = require('path');
 const { v4 } = require('uuid');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')();
 
 const sortObj = (obj) => {
   const res = {};

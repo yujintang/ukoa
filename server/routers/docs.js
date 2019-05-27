@@ -5,7 +5,7 @@ const { get } = require('lodash');
 const url = require('url');
 const path = require('path');
 const fs = require('fs-extra');
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')();
 
 const docs = async (ctx) => {
   // proxy 功能则不需要路过动态路由

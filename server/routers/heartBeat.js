@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../utils/logger')();
 
 const heartBeat = async (ctx) => {
   const { config, consul } = ctx.app;
