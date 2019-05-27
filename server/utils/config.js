@@ -29,8 +29,7 @@ module.exports = async (options) => {
   }
   assert(
     resConfig.name
-    && resConfig.port
-    && resConfig.version, 'ufo: setup config error, name、port、version must be exists! ',
+    && resConfig.version, 'ufo: setup config error, name、version must be exists! ',
   );
 
   // api_name add

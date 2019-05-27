@@ -16,3 +16,5 @@ exports.Joi = require('joi');
 exports.helper = require('./server/utils/helper');
 
 exports.humps = require('humps');
+
+exports.logger = require('./server/utils/logger');

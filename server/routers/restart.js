@@ -1,5 +1,7 @@
+const logger = require('../utils/logger');
+
 const restart = async () => {
-  console.info('ufo: restart api makes service closed!');
+  logger.info('ufo: restart api makes service closed!');
   process.exit();
 };
 

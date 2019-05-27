@@ -1,5 +1,6 @@
 const axios = require('axios');
 const debug = require('debug')('ufo:curl');
+const logger = require('./server/utils/logger');
 
 const curl = async (url, data, config = {}) => {
   try {
@@ -15,7 +16,7 @@ const curl = async (url, data, config = {}) => {
     debug(`Res: ${JSON.stringify(res.data, null, '    ')}`);
     return [res.data, false];
   } catch (err) {
-    console.error(`ufo: curl Error, \t${err.message}\n${err.stack}`);
+    logger.error(err);
     return [`ufo: curl Request Error ${err.message}`, true];
   }
 };

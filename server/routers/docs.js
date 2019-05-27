@@ -5,6 +5,7 @@ const { get } = require('lodash');
 const url = require('url');
 const path = require('path');
 const fs = require('fs-extra');
+const logger = require('../utils/logger');
 
 const docs = async (ctx) => {
   // proxy 功能则不需要路过动态路由
@@ -27,7 +28,6 @@ const docs = async (ctx) => {
     const api = new Api(ctx);
     const joi2md = new Joi2md({ Action: Joi.string().default(Action).required() });
     joi2md.concatSchema(api.schema);
-    console.log(joi2md.printMd());
     return ctx.body = Object.assign(api.docs || {}, {
       API名称: Action,
       功能概述: actionObj[Action].desc,
@@ -59,7 +59,7 @@ const requireFileMulti = (actionPath, splitChar = '_', preArr = []) => {
           desc,
         };
       } catch (err) {
-        console.error(`ufo: ${tempActionPath} require error !\t${err.message}\n${err.stack}`);
+        logger.error(err);
       }
     }
     if (stats.isDirectory()) {

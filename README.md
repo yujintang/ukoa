@@ -89,14 +89,29 @@ ufo.init({
   }
 })
 ```
-### cache
-> 需在config里面配置 cache_api:{url, token} 并且在 controller init() 函数里面，讲cache = true
-```
-init(){
-  this.cache = true;
-  this.schema = {}; //交验参数
+### Controller
+> Controller 继承ukoa的Controller
+```js
+const { Controller, Joi } = require('ukoa');
+
+
+class Example extends Controller {
+  init(ctx) {
+    this.schema = {}; // 参数校验,Joi模型
+    this.cache = true; // 需在config里面配置 cache_api:{url, token} 并且在 controller init() 函数里面，将cache = true
+    this.docs = {}; // 文档
+  }
+
+  // 执行函数体
+  async main(ctx) {
+    return this.ok = {};
+  }
 }
+
+module.exports = Example;
+
 ```
+
 ### DEBUG
 > env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
 ```shell

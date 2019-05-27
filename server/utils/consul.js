@@ -1,6 +1,7 @@
 const axios = require('axios');
 const assert = require('assert');
 const debug = require('debug')('ufo:consul');
+const logger = require('../utils/logger');
 
 class Consul {
   constructor(config = {}) {
@@ -34,7 +35,7 @@ class Consul {
       if (ret_code !== 0) throw new Error(message || Message);
       return [res.data, false];
     } catch (err) {
-      console.error(`ufo: Consul konwhere Error, \t${err.message}\n${err.stack}`);
+      logger.error(err);
       return [err.message, true];
     }
   }
