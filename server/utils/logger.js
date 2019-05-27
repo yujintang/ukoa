@@ -1,7 +1,7 @@
 module.exports = () => {
   const logger = {};
   logger.json = (data) => {
-    if (typeof data === 'object') return JSON.stringify(data);
+    if (typeof data === 'object') data = JSON.stringify(data);
     return data.replace(/\n/g, ';  ');
   };
   logger.info = data => console.info(logger.json(data));
