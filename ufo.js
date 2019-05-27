@@ -6,6 +6,7 @@ const compose = require('koa-compose');
 
 const Consul = require('./server/utils/consul');
 const helper = require('./server/utils/helper');
+const logger = require('./server/utils/logger')();
 require('dotenv').config();
 
 class Ufo extends KoaApplication {
@@ -21,7 +22,7 @@ class Ufo extends KoaApplication {
     this.helper = helper;
     this.dynamicMv = [];
     this.router = new Router({ prefix: process.env.ROUTER_PREFIX || routerPrefix });
-    this.logger = require('./server/utils/logger')();
+    this.logger = logger;
     this.curl = require('./curl');
 
     // 服务发现注册
@@ -106,5 +107,15 @@ class Ufo extends KoaApplication {
     });
   }
 }
+process.on('uncaughtException', (e) => {
+  logger.error(e);
+});
 
+process.on('unhandledRejection', (e) => {
+  logger.error(e);
+});
+
+process.on('rejectionHandled', (e) => {
+  logger.error(e);
+});
 module.exports = Ufo;
