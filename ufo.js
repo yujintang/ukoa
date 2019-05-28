@@ -104,6 +104,7 @@ class Ufo extends KoaApplication {
         api_url: `${this.config.api_ip}:${this.config.port}`,
         api_name: `${this.config.api_name}`,
       });
+      this.logger.info('service start successful!');
     });
   }
 }
