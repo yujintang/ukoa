@@ -26,7 +26,7 @@ const mergeParams = (options = {}) => async (ctx, next) => {
   const additional = {
     ip: ctx.header['x-forwarded-for'] || ctx.header.host,
     method: ctx.method,
-    token: ctx.cookies.get('token') || ctx.cookies.get('INNER_AUTH_TOKEN') || ctx.mergeParams.auth_token,
+    token: ctx.cookies.get('token') || ctx.cookies.get('INNER_AUTH_TOKEN') || ctx.mergeParams.Token,
   };
 
   if (ctx.app.proxy) Object.assign(ctx.mergeParams, additional);

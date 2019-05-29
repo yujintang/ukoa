@@ -9,7 +9,7 @@ const changeRoutePath = () => async (ctx, next) => {
   || _.get(ctx, 'request.query.action')
   || _.get(ctx, 'request.query.Action') || '';
   if (ctx.path === '/') {
-    const __view_docs = _.get(ctx, 'request.body.__view_docs') || _.get(ctx, 'request.query.__view_docs') || false;
+    const __view_docs = _.get(ctx, 'request.query.__view_docs') || _.get(ctx, 'request.body.__view_docs') || false;
     const actionSplit = Action.split('.');
     if (actionSplit.length === 1) {
       const preFix = __view_docs ? 'docs' : 'dynamic';
