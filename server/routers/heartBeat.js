@@ -1,15 +1,13 @@
-const logger = require('../utils/logger')();
-
 const heartBeat = async (ctx) => {
-  const { config, consul } = ctx.app;
-  const newConfig = await consul.ConfigurationDiscovery();
-  if (config.version !== newConfig.version) {
-    ctx.status = 506;
-    logger.info({
-      older: config,
-      newer: newConfig,
-    });
-  }
+  const { config } = ctx.app;
+  // const newConfig = await consul.ConfigurationDiscovery();
+  // if (config.version !== newConfig.version) {
+  //   ctx.status = 506;
+  //   logger.info({
+  //     older: config,
+  //     newer: newConfig,
+  //   });
+  // }
   ctx.body = {
     api_name: config.api_name,
     api_type: config.type,
