@@ -53,23 +53,26 @@ class Controller {
    */
   async cacheMain() {
     const { url, token } = get(this.ctx.app.config, 'cache_api', {});
-    const nameSpace = get(this.ctx.app, 'consul_category', '');
+    const nameSpace = get(this.ctx.app.consul, 'consul_category', '');
+    const params = Object.assign({
+      Action: this.ctx.params.Action,
+    }, this.params);
     const [data, err] = await curl(url, {
       Action: 'Common.GetApiCache',
       Token: token,
       Namespace: nameSpace,
-      Params: this.params,
+      Params: params,
     });
-    if (err || data) {
+    if (err || data.RetCode !== 0) {
       await this.main(this.ctx);
       if (this.error !== SymbolError) return;
-      curl(url, {
+      curl(url, Object.assign({
         Action: 'Common.SetApiCache',
         Token: token,
         Namespace: nameSpace,
-        Params: this.params,
-        Values: data,
-      });
+        Params: params,
+        Values: this.ok,
+      }, this.cache));
     } else {
       this.ok = data;
     }

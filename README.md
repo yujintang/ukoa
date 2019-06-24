@@ -98,7 +98,7 @@ const { Controller, Joi } = require('ukoa');
 class Example extends Controller {
   init(ctx) {
     this.schema = {}; // 参数校验,Joi模型
-    this.cache = true; // 需在config里面配置 cache_api:{url, token} 并且在 controller init() 函数里面，将cache = true
+    this.cache = true; // 需在config里面配置 cache_api:{url, token} 并且在 controller init() 函数里面，将cache = true, 若要配置cache 参数， cache = {TTL: 3600, Count: 100};
     this.docs = {}; // 文档
   }
 
