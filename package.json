@@ -1,10 +1,11 @@
 {
   "name": "ukoa",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ./",
-    "lint:fix": "eslint --fix ./"
+    "lint": "./scripts/cmdCode.js 'eslint ./'",
+    "lint:fix": "./scripts/cmdCode.js 'eslint --fix ./'",
+    "cmd": "./scripts/cmdCode.js"
   },
   "repository": "git@github.com:ufo-parts/ukoa.git",
   "author": "flynn.yu <shanquan54@gmail.com>",

@@ -123,3 +123,11 @@ DEBUG: ufo.checkResponse
 DEBUG: ufo.mergeParams
 DEBUG: ufo.consul
 ```
+
+### scripts
+> 内置执行脚本
+```
+yarn lint         // eslint ./
+yarn lint:fix     // eslint --fix ./
+yarn cmd 
+```
