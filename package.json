@@ -1,10 +1,9 @@
 {
   "name": "ukoa",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "main": "index.js",
   "bin": {
-    "lint": "./scripts/cmdCode.js 'eslint ./'",
-    "lint:fix": "./scripts/cmdCode.js 'eslint --fix ./'",
+    "lint": "./scripts/eslint.js",
     "cmd": "./scripts/cmdCode.js"
   },
   "repository": "git@github.com:ufo-parts/ukoa.git",
