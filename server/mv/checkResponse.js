@@ -11,7 +11,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
   debug(`Req: ${JSON.stringify(ctx.body, null, '    ')}`);
   const { stdout, humps, onlyController } = Object.assign({
     stdout: {
-      Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1, ChainSN: 1,
+      Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1, ChainSN: 1, Total: 1,
     },
     onlyController: true,
   }, options);
@@ -29,6 +29,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
       Message: err ? data : 'Ok!',
+      Total: Object.prototype.toString.apply(data) === '[object object]' ? null : data.length,
     };
   }
   humpsClient[humps] && (ctx.body = humpsClient[humps](ctx.body));
