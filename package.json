@@ -1,8 +1,8 @@
 {
   "name": "ukoa",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "main": "index.js",
-  "scripts": {
+  "bin": {
     "lint": "./scripts/cmdCode.js 'eslint ./'",
     "lint:fix": "./scripts/cmdCode.js 'eslint --fix ./'",
     "cmd": "./scripts/cmdCode.js"
