@@ -116,12 +116,12 @@ module.exports = Example;
 > env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
 ```shell
 # 打印所有log
-DEBUG: ufo.*
+DEBUG: ufo:*
 # 打印其他
-DEBUG: ufo.curl
-DEBUG: ufo.checkResponse
-DEBUG: ufo.mergeParams
-DEBUG: ufo.consul
+DEBUG: ufo:curl:*   //打印某个Action的请求
+DEBUG: ufo:checkResponse
+DEBUG: ufo:mergeParams
+DEBUG: ufo:consul
 ```
 
 ### scripts

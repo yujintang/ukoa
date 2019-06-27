@@ -29,7 +29,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
       Message: err ? `${ctx.app.consul.consul_category} -> ${data}` : 'Ok!',
-      Total: Object.prototype.toString.apply(data) === '[object object]' ? null : data.length,
+      Total: Object.prototype.toString.apply(data) === '[object Array]' ? data.length : undefined,
     };
   }
   humpsClient[humps] && (ctx.body = humpsClient[humps](ctx.body));

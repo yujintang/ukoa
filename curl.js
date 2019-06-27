@@ -1,5 +1,5 @@
 const axios = require('axios');
-const debug = require('debug')('ufo:curl');
+const createDebug = require('debug');
 const logger = require('./server/utils/logger')();
 
 const curl = async (url, data, config = {}) => {
@@ -11,6 +11,7 @@ const curl = async (url, data, config = {}) => {
       url,
       data,
     }, config);
+    const debug = createDebug(`ufo:curl:${data.Action}`);
     debug(`Req: ${JSON.stringify(entity, null, '    ')}`);
     const res = await axios(entity);
     debug(`Res: ${JSON.stringify(res.data, null, '    ')}`);

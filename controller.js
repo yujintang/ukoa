@@ -23,13 +23,14 @@ class Controller {
   /**
    * 验证参数与重新赋值
    */
-  validate(data = this.params, schema = this.schema, throwErr = true) {
+  validate(data = this.params, schema = this.schema) {
     const { value, error } = Joi.validate(data, schema, {
       allowUnknown: true,
       stripUnknown: true,
     });
-    if (error && throwErr) throw error;
+    if (error) return error.message;
     this.params = value;
+    return false;
   }
 
   /**
