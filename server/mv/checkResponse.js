@@ -28,7 +28,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       TrackSN: ctx.mergeParams.TrackSN,
       ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
-      Message: err ? data : 'Ok!',
+      Message: err ? `${ctx.app.consul.consul_category} -> ${data}` : 'Ok!',
       Total: Object.prototype.toString.apply(data) === '[object object]' ? null : data.length,
     };
   }
