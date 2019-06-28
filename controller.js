@@ -75,7 +75,7 @@ class Controller {
         Values: this.ok,
       }, this.cache));
     } else {
-      this.ok = data;
+      this.ok = data.Data;
     }
   }
 
