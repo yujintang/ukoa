@@ -1,4 +1,3 @@
-const humpsClient = require('humps');
 const debug = require('debug')('ufo:checkResponse');
 
 /**
@@ -9,7 +8,7 @@ const debug = require('debug')('ufo:checkResponse');
 const checkResponse = (options = {}) => async (ctx, next) => {
   await next();
   debug(`Req: ${JSON.stringify(ctx.body, null, '    ')}`);
-  const { stdout, humps, onlyController } = Object.assign({
+  const { stdout, trigger, onlyController } = Object.assign({
     stdout: {
       Action: 1, RetCode: 1, Message: 1, Data: 1, TrackSN: 1, ChainSN: 1, Total: 1,
     },
@@ -32,7 +31,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       Total: Object.prototype.toString.apply(data) === '[object Array]' ? data.length : undefined,
     };
   }
-  humpsClient[humps] && (ctx.body = humpsClient[humps](ctx.body));
+  ctx.body = trigger(ctx.body);
   if (ctx.body) Object.keys(ctx.body).forEach((key) => { if (!stdout[key]) delete ctx.body[key]; });
   debug(`Res: ${JSON.stringify(ctx.body, null, '    ')}`);
 };

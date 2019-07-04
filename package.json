@@ -1,6 +1,6 @@
 {
   "name": "ukoa",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "main": "index.js",
   "bin": {
     "lint": "./scripts/eslint.js",
@@ -9,6 +9,9 @@
   "repository": "git@github.com:ufo-parts/ukoa.git",
   "author": "flynn.yu <shanquan54@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint --fix ./"
+  },
   "devDependencies": {
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
