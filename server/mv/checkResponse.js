@@ -31,7 +31,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       Total: Object.prototype.toString.apply(data) === '[object Array]' ? data.length : undefined,
     };
   }
-  ctx.body = trigger(ctx.body);
+  if (typeof trigger === 'function') ctx.body = trigger(ctx.body);
   if (ctx.body) Object.keys(ctx.body).forEach((key) => { if (!stdout[key]) delete ctx.body[key]; });
   debug(`Res: ${JSON.stringify(ctx.body, null, '    ')}`);
 };
