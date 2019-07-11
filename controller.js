@@ -7,15 +7,14 @@ const SymbolError = Symbol('error');
  * 用于动态路由继承
  */
 class Controller {
-  constructor(ctx = { app: {} }, schema = {}) {
+  constructor(ctx = { app: {} }, schema = {}, params = {}) {
     this.ctx = ctx;
-    this.baseSchema = schema;
+    this.schema = schema;
     this.Joi = Joi;
-    if (this.checkParams) this.init = this.checkParams;
-    if (this.process) this.main = this.process;
-    this.init(this.ctx, this.joi);
+    if (this.checkParams) this.init = this.checkParams; // alias
+    if (this.process) this.main = this.process; // alias
     this.helper = ctx.app.helper;
-    this.params = ctx.mergeParams;
+    this.params = params;
     this.ok = {};
     this.error = SymbolError;
   }
@@ -37,7 +36,6 @@ class Controller {
    * 初始化数据
    */
   init() {
-    this.schema = this.baseSchema;
     this.cache = false;
     this.docs = {};
   }
@@ -54,6 +52,7 @@ class Controller {
    */
   async cacheMain() {
     const { url, token } = get(this.ctx.app.config, 'cache_api', {});
+    if (!url || !token) throw new Error('使用Cache必须配置{cache_api: {url, token}}');
     const nameSpace = get(this.ctx.app.consul, 'consul_category', '');
     const params = Object.assign({
       Action: this.ctx.params.Action,
@@ -85,10 +84,9 @@ class Controller {
    */
   ctxBody() {
     if (this.error !== SymbolError) {
-      this.ctx.body = [this.error, true];
-    } else {
-      this.ctx.body = [this.ok, false];
+      return [this.error, true];
     }
+    return [this.ok, false];
   }
 }
 
