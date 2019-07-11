@@ -64,10 +64,18 @@ const uuidV4 = (replace = true, char = '') => {
   return v4();
 };
 
+const internalCall = ctx => async (Action, params) => {
+  const Api = ctx.app.apiMap.get(Action);
+  const api = new Api(ctx, {}, params);
+  await api.main(api.ctx);
+  return api.ctxBody();
+};
+
 module.exports = {
   normalize,
   generateHash,
   generateHmac,
   requireFileMulti,
   uuidV4,
+  internalCall,
 };
