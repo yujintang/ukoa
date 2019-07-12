@@ -50,6 +50,7 @@ class Ufo extends KoaApplication {
     this.use(require('koa-bodyparser')(options['koa-bodyparser'] || { formLimit: '50mb', jsonLimit: '50mb' }));
     this.use(require('./server/mv/changeRoutePath')(options.changeRoutePath)); // 根据action改变路由
     this.use(require('./server/mv/mergeParams')(options.mergeParams)); // 合并参数
+    this.use(require('./server/mv/internalCall')(options.internalCall)); // 内部调用
     this.use(require('./server/mv/checkResponse')(options.checkResponse)); // 检查参数
 
     this.dynamicMv.push(
