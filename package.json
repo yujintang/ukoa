@@ -1,6 +1,6 @@
 {
   "name": "ukoa",
-  "version": "3.2.13",
+  "version": "3.2.14",
   "main": "index.js",
   "bin": {
     "lint": "./scripts/eslint.js",
@@ -31,7 +31,7 @@
     "koa-json": "^2.0.2",
     "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.6",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "shortid": "^2.2.14",
     "uuid": "^3.3.2"

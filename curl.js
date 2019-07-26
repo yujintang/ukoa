@@ -18,7 +18,9 @@ const curl = async (url, data, config = {}) => {
     return [res.data, false];
   } catch (err) {
     logger.error(err);
-    return [`ufo: curl Request Error ${err.message}`, true];
+    const errMessage = `ufo: curl Request Error ${err.message}`;
+    if (config.throw) throw new Error(errMessage);
+    return [errMessage, true];
   }
 };
 
