@@ -19,7 +19,7 @@ const changeRoutePath = () => async (ctx, next) => {
       if (ctx.app.proxy) {
         ctx.routerPath = `/proxy/${actionSplit[0]}/${actionSplit[1]}`;
       } else {
-        throw new Error('非proxy服务, Action请勿携带 “APP:” 字段');
+        throw new Error('非proxy服务, Action请勿携带 “app.” 字段');
       }
     }
   }
