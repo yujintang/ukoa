@@ -15,7 +15,13 @@ const changeRoutePath = () => async (ctx, next) => {
       const preFix = __view_docs ? 'docs' : 'dynamic';
       ctx.routerPath = `/${preFix}/${actionSplit[0]}`;
     }
-    if (actionSplit.length === 2) ctx.routerPath = `/proxy/${actionSplit[0]}/${actionSplit[1]}`;
+    if (actionSplit.length === 2) {
+      if (ctx.app.proxy) {
+        ctx.routerPath = `/proxy/${actionSplit[0]}/${actionSplit[1]}`;
+      } else {
+        throw new Error('非proxy服务, Action请勿携带 “APP:” 字段');
+      }
+    }
   }
   await next();
 };
