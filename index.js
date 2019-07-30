@@ -6,6 +6,8 @@ exports.Controller = require('./controller');
 
 exports.curl = require('./curl');
 
+exports.ufoCurl = require('./ufoCurl');
+
 exports.lodash = require('lodash');
 exports._ = require('lodash');
 
