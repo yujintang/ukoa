@@ -111,7 +111,13 @@ class Example extends Controller {
 module.exports = Example;
 
 ```
-
+#### DOC
+> 在配置文件config中，应该指定doc_url, 文档目录为: http://docs.example.com/?__view_docs=true&Action=*
+```json
+{
+  "doc_url": "http://docs.example.com/?__view_docs=true&Action="
+}
+```
 ### DEBUG
 > env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
 ```shell

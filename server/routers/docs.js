@@ -8,7 +8,6 @@ const fs = require('fs-extra');
 const logger = require('../utils/logger')();
 
 const docs = async (ctx) => {
-  // proxy 功能则不需要路过动态路由
   const { Action } = ctx.params;
   const Api = ctx.app.apiMap.get(Action);
   const actionObj = requireFileMulti(path.join(process.cwd(), ctx.app.apiDir));
@@ -26,13 +25,22 @@ const docs = async (ctx) => {
   }
   try {
     const api = new Api(ctx);
+    api.init(api.ctx, api.Joi);
     const joi2md = new Joi2md({ Action: Joi.string().default(Action).required() });
     joi2md.concatSchema(api.schema);
+    let mockFile;
+    try {
+      mockFile = fs.readFileSync(path.join(process.cwd(), `./.mock/${Action}.json`), { encoding: 'utf8' });
+    } catch (e) {
+      mockFile = `{
+}`;
+    }
     return ctx.body = Object.assign(api.docs || {}, {
       API名称: Action,
       功能概述: actionObj[Action].desc,
       请求参数: joi2md.printMd().split('\n'),
       请求json: joi2md.printJson(),
+      返回值: mockFile.split('\n'),
     });
   } catch (err) {
     ctx.app.logger.error(err);
