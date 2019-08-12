@@ -55,6 +55,7 @@ class Ufo extends KoaApplication {
 
     this.dynamicMv.push(
       require('./server/mv/checkOwnData')(options.checkOwnData),
+      require('./server/mv/checkAction')(options.checkAction),
     );
     return this;
   }
