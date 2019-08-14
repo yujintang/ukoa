@@ -3,26 +3,34 @@ const path = require('path');
 const KoaApplication = require('koa');
 const Router = require('koa-router');
 const compose = require('koa-compose');
+const os = require('os');
+const { get } = require('lodash');
 
 const Consul = require('./server/utils/consul');
 const helper = require('./server/utils/helper');
-const logger = require('./server/utils/logger')();
+const logger = require('./server/utils/logger');
 require('dotenv').config();
 
 class Ufo extends KoaApplication {
   constructor({
+    name,
     baseDir, apiDir, configDir, routerPrefix,
     consul_url, consul_token, consul_type, consul_category, consul_version,
+    try_catch_url, try_catch_token,
   } = {}) {
     super();
     this.baseDir = baseDir || process.cwd(); // 系统根目录
     this.apiDir = apiDir || './server/api'; // API存放目录
     this.configDir = configDir || './server/config/.env.json'; // 配置文件存放目录
+    this.tryCatchUrl = process.env.TRY_CATCH_URL || try_catch_url,
+    this.tryCatchToken = process.env.TRY_CATCH_TOKEN || try_catch_token,
+    this.name = name || consul_category,
+    this.ip = get(os.networkInterfaces(), 'eth0[0].address', '127.0.0.1'),
     assert(typeof this.baseDir === 'string', 'ufo: base_dir must be a string!');
     this.helper = helper;
     this.dynamicMv = [];
     this.router = new Router({ prefix: process.env.ROUTER_PREFIX || routerPrefix });
-    this.logger = logger;
+    this.logger = logger(this);
     this.curl = require('./curl');
 
     // 服务发现注册
@@ -67,6 +75,8 @@ class Ufo extends KoaApplication {
       configDir: this.configDir,
       consul: this.consul,
       env: this.env,
+      ip: this.ip,
+      name: this.name,
     });
     await this.loadApi();
     this.loadDefaultMv(mv);
@@ -110,14 +120,14 @@ class Ufo extends KoaApplication {
   }
 }
 process.on('uncaughtException', (e) => {
-  logger.error(e);
+  logger().error(e);
 });
 
 process.on('unhandledRejection', (e) => {
-  logger.error(e);
+  logger().error(e);
 });
 
 process.on('rejectionHandled', (e) => {
-  logger.error(e);
+  logger().error(e);
 });
 module.exports = Ufo;

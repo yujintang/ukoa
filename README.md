@@ -18,6 +18,8 @@ const runServer = async () => {
     consul_token: '',
     consul_type: '',
     consul_category: '',
+    try_catch_url: '',
+    try_catch_token: ''
   });
   await ufo.init();
   await ufo.start();
@@ -35,7 +37,7 @@ const {Ufo, Controller, Joi, lodash, moment} = require('ukoa');
 ### UKOA 内置中间价
 > ufo 内置集成以下中间价
 ```js
-systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, checkResponse
+systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, checkResponse, internalCall
 ```
 
 ### gateway 项目
@@ -118,6 +120,7 @@ module.exports = Example;
   "doc_url": "http://docs.example.com/?__view_docs=true&Action="
 }
 ```
+
 ### DEBUG
 > env 添加DEBNUG,可以打印对应log，方便排查问题，现在支持以下DEBUG
 ```shell
