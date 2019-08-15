@@ -21,9 +21,8 @@ module.exports = (ufo = {}) => {
         IP: ufo.ip,
         Info: data.stack || data,
       });
-    } else {
-      console.error(logger.json(data));
     }
+    console.error(logger.json(data));
   };
   return logger;
 };
