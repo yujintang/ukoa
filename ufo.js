@@ -31,7 +31,14 @@ class Ufo extends KoaApplication {
     this.dynamicMv = [];
     this.router = new Router({ prefix: process.env.ROUTER_PREFIX || routerPrefix });
     this.logger = logger(this);
-    this.curl = require('./curl');
+    this.curl = async (url, data, config) => {
+      const result = await require('./curl')(url, data, config, { logger: this.logger });
+      return result;
+    };
+    this.ufoCurl = async (url, data, config) => {
+      const result = await require('./ufoCurl')(url, data, config, { logger: this.logger });
+      return result;
+    };
 
     // 服务发现注册
     this.consul = new Consul({

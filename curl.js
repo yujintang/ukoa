@@ -1,8 +1,8 @@
 const axios = require('axios');
 const createDebug = require('debug');
-const logger = require('./server/utils/logger')();
 
-const curl = async (url, data, config = {}) => {
+const curl = async (url, data, config = {}, options = {}) => {
+  const logger = options.logger || require('./server/utils/logger')();
   try {
     if (typeof url !== 'string') throw new Error('url must string');
     const entity = Object.assign({

@@ -12,9 +12,8 @@ module.exports = (ufo = {}) => {
   };
   logger.info = data => console.info(logger.json(data));
   logger.error = (data) => {
-    if (ufo.tryCatchUrl && ufo.tryCatchToken) {
-      const curl = require('../../curl');
-      curl(ufo.tryCatchUrl, {
+    if (ufo.tryCatchUrl && ufo.tryCatchToken && ufo.curl) {
+      ufo.curl(ufo.tryCatchUrl, {
         Action: 'Common.SaveAPPException',
         Token: ufo.tryCatchToken,
         APP: ufo.name,
