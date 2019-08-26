@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-control-regex */
 /* eslint-disable no-cond-assign */
@@ -51,7 +52,7 @@ module.exports = joi => ({
     params: {
       single_quota: joi.boolean().default(true),
     },
-    validate(params, value) {
+    validate(params, value, state, options) {
       return escapeString(value, params.single_quota);
     },
   }],
