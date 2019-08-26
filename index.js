@@ -13,7 +13,7 @@ exports._ = require('lodash');
 
 exports.moment = require('moment');
 
-exports.Joi = require('joi');
+exports.Joi = require('./joi');
 
 exports.helper = require('./server/utils/helper');
 

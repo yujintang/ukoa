@@ -1,8 +1,8 @@
-const Joi = require('joi');
 const { get } = require('lodash');
 const curl = require('./curl');
 
 const SymbolError = Symbol('error');
+const Joi = require('./joi');
 /**
  * 用于动态路由继承
  */
