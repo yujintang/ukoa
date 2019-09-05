@@ -1,4 +1,4 @@
-# UKOA (Node.js 服务器框架)
+# UKOA (Node.js 服务器框架, 里面内容涉及特殊业务逻辑, 请谨慎使用)
 
 ## Install
 
@@ -22,28 +22,44 @@ const runServer = async () => {
     try_catch_token: ''
   });
   await ufo.init();
+  // ufo.useDynamic(require('./server/mv/xxx')()); 引入某个中间件
   await ufo.start();
 };
 
 runServer();
 ```
 ## Documents
-### UKOA 提供一下常用模块
+- [内置常用模块](#内置常用模块)
+- [内置中间价](#内置中间价)
+- [中间件](#中间件)
+- [gateway项目](#gateway项目)
+- [路由router](#路由router)
+- [配置初始化](#配置初始化)
+- [Controller](#Controller)
+- [cacheMap内存缓存有效期数据](#cacheMap内存缓存有效期数据)
+- [文档](#文档)
+- [DEBUG](#DEBUG)
+
+### 内置常用模块
 > 避免重复依赖，常用模块请使用ukoa提供的.
 ```js
-const {Ufo, Controller, Joi, lodash, moment} = require('ukoa');
+const {Ufo, Controller, Joi, lodash, moment, humps, curl, ufoCurl } = require('ukoa');
 ```
 
-### UKOA 内置中间价
+### 内置中间价
 > ufo 内置集成以下中间价
 ```js
-systemCatch, koa2-cors, koa-json, koa-bodyparser, mergeParams, checkResponse, internalCall
-```
-
-### gateway 项目
-> 若是gateway项目,请开启以下配置
-```js
-ufo.proxy = true
+systemCatch           // 捕获系统错误
+koa2-cors             
+koa-json
+koa-bodyparser
+appWithCtx            // app下挂载ctx app.ctx
+changeRoutePath       // 根据Action以及参数改变路由, 暂时支持 doc, dynamicAction 等
+mergeParams           // 合并参数 req.mergeParams = _.merge({}, req.query, req.body);
+internalCall          // 内部各个Action相互调用 ctx.internalCall(Action, params)
+checkResponse         // 返回值检查
+checkOwnData          // 检查是否携带应该携带的参数
+checkAction           // 检查系统是否允许该Action
 ```
 
 ### 中间件
@@ -55,6 +71,11 @@ ufo.use(fn);
 ```js
 ufo.dynamicMv(fn);
 ```
+
+### gateway项目
+> 若是gateway项目,请开启以下配置
+```js
+ufo.proxy = true
 ```
 
 ### 路由router
@@ -64,30 +85,26 @@ ctx.path === '/'的请求, 会根据请求字段'Action'去智能匹配到以下
 ufo.router
   .get('/HeartBeat', mv)
   .get('/Restart', mv)
-  .all('/proxy/:app/:Action', mv)
+  .all('/docs/:Action', mv)
   .all('/dynamic/:Action', mv)
 ```
 
-### ufo.init
-> 初始化配置文件、挂载action、挂载中间件等操作，可传入参数配置
+### 配置初始化
+> 初始化配置文件、各种中间件配置操作，可传入参数配置, 默认配置如下：
 ```js
 ufo.init({
   mv: {
-    'systemCatch': {},
-    'koa2-cors': {},
-    'koa-json': {},
-    'koa-bodyparser':{},
-    'changeRoutePath':{},
-    'mergeParams':{},
-    'checkResponse':{},
-    'checkAction':{},
-  }
-})
-默认配置如下:
-ufo.init({
-  mv: {
+    'systemCatch': {enable: true},
     'koa2-cors': { origin: ctx => ctx.headers.origin, credentials: true },
-    'koa-bodyparser': { formLimit: '50mb', jsonLimit: '50mb' }
+    'koa-json': {},
+    'koa-bodyparser': { formLimit: '50mb', jsonLimit: '50mb' },
+    'appWithCtx':{enable: true},
+    'changeRoutePath':{enable: true},
+    'mergeParams':{enable: true},
+    'internalCall':{enable: true},
+    'checkResponse':{enable: true},
+    'checkOwnData': { enable: false, key: 'ownData' },
+    'checkAction':{enable: true},
   }
 })
 ```
@@ -113,8 +130,27 @@ class Example extends Controller {
 module.exports = Example;
 
 ```
-#### DOC
-> 在配置文件config中，应该指定doc_url, 文档目录为: http://docs.example.com/?__view_docs=true&Action=*
+
+### cacheMap内存缓存有效期数据
+> 对于一些需要缓存在内存中、按时刷新的内容，可以使用cacheMap, 
+```js
+module.exports = options => async (ctx, next) => {
+  if (!ctx.cacheMap) ctx.cacheMap = ctx.app.cacheMap;
+  const { cacheMap } = ctx.app;
+
+  if (!cacheMap.has('cacheBody')) {
+    cacheMap.set('cacheBody', async ()=>{ return 'hello world' }, 1000 * 20);
+  }
+  await next();
+};
+
+// 使用
+await ctx.cacheMap.get('cacheBody') // hello world
+```
+#### 文档
+* 在配置文件config中，应该指定doc_url, 文档目录为: http://docs.example.com/?__view_docs=true&Action=*
+* 在参数中指定 `__view_docs=true`, 即可获取API操作文档。
+* .mock 文件夹下创建 ${Action}.json 文件，作为文档 mock返回值
 ```json
 {
   "doc_url": "http://docs.example.com/?__view_docs=true&Action="
@@ -131,6 +167,7 @@ DEBUG: ufo:curl:*   //打印某个Action的请求
 DEBUG: ufo:checkResponse
 DEBUG: ufo:mergeParams
 DEBUG: ufo:consul
+DEBUG: ufo:cacheMap
 ```
 
 ### scripts

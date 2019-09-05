@@ -1,9 +1,9 @@
 /**
- * 检查ownData
+ * 检查参数
  */
 const checkOwnData = options => async (ctx, next) => {
-  const { enable } = Object.assign({ enable: false }, options);
-  if (enable && !ctx.app.proxy && !ctx.mergeParams.ownData) return ctx.body = { RetCode: -1, Message: '必须由api-gateway跳转' };
+  const { enable, key } = Object.assign({ enable: true }, options);
+  if (enable && !ctx.app.proxy && !ctx.mergeParams[key]) return ctx.body = { RetCode: -1, Message: `缺少${key}参数, 请检查数据来源是否正确。` };
   await next();
   return true;
 };

@@ -9,6 +9,7 @@ const { get } = require('lodash');
 const Consul = require('./server/utils/consul');
 const helper = require('./server/utils/helper');
 const logger = require('./server/utils/logger');
+const CacheMap = require('./server/utils/cacheMap');
 require('dotenv').config();
 
 class Ufo extends KoaApplication {
@@ -39,6 +40,7 @@ class Ufo extends KoaApplication {
       const result = await require('./ufoCurl')(url, data, config, { logger: this.logger });
       return result;
     };
+    this.cacheMap = new CacheMap(this, 60 * 1000);
 
     // 服务发现注册
     this.consul = new Consul({
@@ -63,13 +65,14 @@ class Ufo extends KoaApplication {
     this.use(require('koa2-cors')(options['koa2-cors'] || { origin: ctx => ctx.headers.origin, credentials: true }));
     this.use(require('koa-json')(options['koa-json']));
     this.use(require('koa-bodyparser')(options['koa-bodyparser'] || { formLimit: '50mb', jsonLimit: '50mb' }));
+    this.use(require('./server/mv/appWithCtx')(options.appWithCtx)); // ctx.app.ctx 将每次ctx带入app中
     this.use(require('./server/mv/changeRoutePath')(options.changeRoutePath)); // 根据action改变路由
     this.use(require('./server/mv/mergeParams')(options.mergeParams)); // 合并参数
     this.use(require('./server/mv/internalCall')(options.internalCall)); // 内部调用
     this.use(require('./server/mv/checkResponse')(options.checkResponse)); // 检查参数
 
     this.dynamicMv.push(
-      require('./server/mv/checkOwnData')(options.checkOwnData),
+      require('./server/mv/checkOwnData')(options.checkOwnData || { enable: false, key: 'ownData' }),
       require('./server/mv/checkAction')(options.checkAction),
     );
     return this;
@@ -137,4 +140,5 @@ process.on('unhandledRejection', (e) => {
 process.on('rejectionHandled', (e) => {
   logger().error(e);
 });
+
 module.exports = Ufo;
