@@ -53,7 +53,7 @@ class Controller {
   async cacheMain() {
     const { url, token } = get(this.ctx.app.config, 'cache_api', {});
     if (!url || !token) throw new Error('使用Cache必须配置{cache_api: {url, token}}');
-    const nameSpace = get(this.ctx.app.consul, 'consul_category', '');
+    const nameSpace = this.ctx.app.name;
     const params = Object.assign({
       Action: this.ctx.params.Action,
     }, this.params);

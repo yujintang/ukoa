@@ -19,4 +19,8 @@ exports.helper = require('./server/utils/helper');
 
 exports.humps = require('humps');
 
-exports.logger = require('./server/utils/logger');
+exports.plugins = {
+  logger: require('./server/plugins/logger'),
+  online_config: require('./server/plugins/online_config'),
+  registry_service: require('./server/plugins/registry_service'),
+};

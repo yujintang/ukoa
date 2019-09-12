@@ -3,7 +3,6 @@ const qs = require('querystring');
 const fs = require('fs-extra');
 const path = require('path');
 const { v4 } = require('uuid');
-const logger = require('../utils/logger')();
 
 const sortObj = (obj) => {
   const res = {};
@@ -48,7 +47,7 @@ const requireFileMulti = (actionPath, splitChar = '_', preArr = []) => {
         const apiClass = require(tempActionPath);
         fileMap.set(path.basename([].concat(preArr, v).join(splitChar), '.js'), apiClass);
       } catch (err) {
-        logger.error(err);
+        console.error(err);
       }
     }
     if (stats.isDirectory()) {

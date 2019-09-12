@@ -5,7 +5,8 @@ const { get } = require('lodash');
 const url = require('url');
 const path = require('path');
 const fs = require('fs-extra');
-const logger = require('../utils/logger')();
+
+const logger = console;
 
 const docs = async (ctx) => {
   const { Action } = ctx.params;

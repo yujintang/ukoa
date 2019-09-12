@@ -6,51 +6,43 @@ const compose = require('koa-compose');
 const os = require('os');
 const { get } = require('lodash');
 
-const Consul = require('./server/utils/consul');
 const helper = require('./server/utils/helper');
-const logger = require('./server/utils/logger');
 const CacheMap = require('./server/utils/cacheMap');
+
+const pkg = require(path.join(process.cwd(), './package.json'));
 require('dotenv').config();
 
 class Ufo extends KoaApplication {
   constructor({
     name,
     baseDir, apiDir, configDir, routerPrefix,
-    consul_url, consul_token, consul_type, consul_category, consul_version,
+    consul_url, consul_token, consul_type, consul_category,
     try_catch_url, try_catch_token,
   } = {}) {
     super();
     this.baseDir = baseDir || process.cwd(); // 系统根目录
+    assert(typeof this.baseDir === 'string', 'ufo: baseDir must be a string!');
     this.apiDir = apiDir || './server/api'; // API存放目录
     this.configDir = configDir || './server/config/.env.json'; // 配置文件存放目录
+    this.name = name || pkg.name,
+    this.ip = get(os.networkInterfaces(), 'eth0[0].address', '127.0.0.1'),
     this.tryCatchUrl = process.env.TRY_CATCH_URL || try_catch_url,
     this.tryCatchToken = process.env.TRY_CATCH_TOKEN || try_catch_token,
-    this.name = name || consul_category,
-    this.ip = get(os.networkInterfaces(), 'eth0[0].address', '127.0.0.1'),
-    assert(typeof this.baseDir === 'string', 'ufo: base_dir must be a string!');
     this.helper = helper;
+    this.plugins = [];
     this.dynamicMv = [];
     this.router = new Router({ prefix: process.env.ROUTER_PREFIX || routerPrefix });
-    this.logger = logger(this);
-    this.curl = async (url, data, config) => {
-      const result = await require('./curl')(url, data, config, { logger: this.logger });
-      return result;
-    };
-    this.ufoCurl = async (url, data, config) => {
-      const result = await require('./ufoCurl')(url, data, config, { logger: this.logger });
-      return result;
-    };
+    this.logger = console;
+    this.curl = async (url, data, config) => require('./curl')(url, data, config, { logger: this.logger });
+    this.ufoCurl = async (url, data, config) => require('./ufoCurl')(url, data, config, { logger: this.logger });
     this.cacheMap = new CacheMap(this, 60 * 1000);
 
     // 服务发现注册
-    this.consul = new Consul({
-      consul_url: process.env.CONSUL_URL || consul_url,
-      consul_token: process.env.CONSUL_TOKEN || consul_token,
-      consul_type: process.env.CONSUL_TYPE || consul_type,
-      consul_category: process.env.CONSUL_CATEGORY || consul_category,
-      consul_version: process.env.CONSUL_VERSION || consul_version,
-      env: this.env,
-    });
+    this.consul = {
+      url: consul_url,
+      token: consul_token,
+      key_path: `${consul_type}/${consul_category}/${process.env.CONSUL_VERSION}`,
+    };
   }
 
   // loadApi
@@ -80,16 +72,22 @@ class Ufo extends KoaApplication {
 
   // 配置文件
   async init({ mv } = {}) {
-    this.config = await require('./server/utils/config')({
-      baseDir: this.baseDir,
-      configDir: this.configDir,
-      consul: this.consul,
-      env: this.env,
-      ip: this.ip,
-      name: this.name,
-    });
+    this.plugin(require('./server/plugins/online_config')(this.env === 'production', this.consul));
+    this.plugin(require('./server/plugins/registry_service')(this.env === 'production', this.consul));
+    this.plugin(require('./server/plugins/logger')(this.env === 'production', { url: this.tryCatchUrl, token: this.tryCatchToken }));
+
+    // loadPlugins
+    while (this.plugins.length) await this.plugins.shift()(this);
+
     await this.loadApi();
     this.loadDefaultMv(mv);
+    return this;
+  }
+
+  // 增加插件
+  async plugin(fn) {
+    if (typeof fn !== 'function') throw new TypeError('plugin must be a function!');
+    this.plugins.push(fn);
     return this;
   }
 
@@ -102,6 +100,9 @@ class Ufo extends KoaApplication {
 
   // start app
   async start() {
+    // load plugins
+    while (this.plugins.length) await this.plugins.shift()(this);
+
     // 路由
     this.router
       .get('/HeartBeat', require('./server/routers/heartBeat'))
@@ -130,15 +131,15 @@ class Ufo extends KoaApplication {
   }
 }
 process.on('uncaughtException', (e) => {
-  logger().error(e);
+  console.error(e);
 });
 
 process.on('unhandledRejection', (e) => {
-  logger().error(e);
+  console.error(e);
 });
 
 process.on('rejectionHandled', (e) => {
-  logger().error(e);
+  console.error(e);
 });
 
 module.exports = Ufo;
