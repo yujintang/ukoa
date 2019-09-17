@@ -9,7 +9,7 @@ module.exports = (enable = false, options = {}) => async(ufo) => {
     token,
   } = options;
 
-  ufo.register = async () => {
+  ufo.registry = async () => {
     // 注册服务
     const [, err] = await ufo.curl(url, {
       action: 'ServiceRegistry',
