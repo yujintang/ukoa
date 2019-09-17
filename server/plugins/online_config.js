@@ -1,9 +1,12 @@
 const assert = require('assert');
 const { get } = require('lodash');
+const path = require('path');
+const fs = require('fs-extra');
 
 // 获取服务器配置
 module.exports = (enable = false, options = {}) => async(ufo) => {
-  if (!enable) return;
+  // local config
+  if (!enable) return ufo.config = fs.readJsonSync(path.join(ufo.baseDir, ufo.configDir), { throws: false }) || {};
   const {
     url,
     token,
@@ -21,4 +24,5 @@ module.exports = (enable = false, options = {}) => async(ufo) => {
   if (err) process.exit(0);
   ufo.config = get(consulCfg, `configuration[${key_path}]`, {});
   assert(ufo.config.name && ufo.config.version, 'ufo: setup config error, name、version must be exists! ');
+  return true;
 };

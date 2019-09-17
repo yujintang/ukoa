@@ -122,9 +122,9 @@ class Ufo extends KoaApplication {
       // 服务注册
       if (this.env === 'production') await this.consul.ServiceRegistry(this.config);
       this.logger.info({
-        api_env: `${this.config.api_env}`,
-        api_url: `${this.config.api_ip}:${this.config.port}`,
-        api_name: `${this.config.api_name}`,
+        api_env: `${this.env}`,
+        api_url: `${this.ip}:${this.config.port}`,
+        api_name: `${this.name}`,
       });
       this.logger.info('service start successful!');
     });
