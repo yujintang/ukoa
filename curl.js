@@ -6,7 +6,7 @@ const curl = async (url, data, config = {}, options = {}) => {
   try {
     if (typeof url !== 'string') throw new Error('url must string');
     const entity = Object.assign({
-      timeout: 20000,
+      timeout: 60000,
       method: 'post',
       url,
       data,

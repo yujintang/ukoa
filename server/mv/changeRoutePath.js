@@ -11,10 +11,12 @@ const changeRoutePath = () => async (ctx, next) => {
   if (ctx.path === '/') {
     const __view_docs = _.get(ctx, 'request.query.__view_docs') || _.get(ctx, 'request.body.__view_docs') || false;
     const actionSplit = Action.split('.');
+
     if (actionSplit.length === 1) {
-      const preFix = __view_docs ? 'docs' : 'dynamic';
+      const preFix = ['1', 'true', true, 1].includes(__view_docs) ? 'docs' : 'dynamic';
       ctx.routerPath = `/${preFix}/${actionSplit[0]}`;
     }
+
     if (actionSplit.length === 2) {
       if (ctx.app.proxy) {
         ctx.routerPath = `/proxy/${actionSplit[0]}/${actionSplit[1]}`;
