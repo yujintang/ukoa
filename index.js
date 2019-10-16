@@ -8,6 +8,8 @@ exports.curl = require('./curl');
 
 exports.ufoCurl = require('./ufoCurl');
 
+exports.axios = require('axios');
+
 exports.lodash = require('lodash');
 exports._ = require('lodash');
 

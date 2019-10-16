@@ -4,7 +4,10 @@ const KoaApplication = require('koa');
 const Router = require('koa-router');
 const compose = require('koa-compose');
 const os = require('os');
+const moment = require('moment');
 const { get } = require('lodash');
+
+const apiId = require('shortid').generate();
 
 const helper = require('./server/utils/helper');
 const CacheMap = require('./server/utils/cacheMap');
@@ -21,13 +24,19 @@ class Ufo extends KoaApplication {
   } = {}) {
     super();
     this.baseDir = baseDir || process.cwd(); // 系统根目录
+    this.apiId = apiId;
+    this.startTime = moment().format('YYYY-MM-DD HH:mm:ss');
+
     assert(typeof this.baseDir === 'string', 'ufo: baseDir must be a string!');
+
     this.apiDir = apiDir || './server/api'; // API存放目录
     this.configDir = configDir || './server/config/.env.json'; // 配置文件存放目录
     this.name = name || pkg.name,
     this.ip = get(os.networkInterfaces(), 'eth0[0].address', '127.0.0.1'),
+
     this.tryCatchUrl = process.env.TRY_CATCH_URL || try_catch_url,
     this.tryCatchToken = process.env.TRY_CATCH_TOKEN || try_catch_token,
+
     this.helper = helper;
     this.plugins = [];
     this.dynamicMv = [];

@@ -29,6 +29,7 @@ const runServer = async () => {
 runServer();
 ```
 ## Documents
+- [consul存储配置文件](#consul存储配置文件)
 - [内置常用模块](#内置常用模块)
 - [内置中间价](#内置中间价)
 - [中间件](#中间件)
@@ -36,14 +37,37 @@ runServer();
 - [路由router](#路由router)
 - [配置初始化](#配置初始化)
 - [Controller](#Controller)
+- [ufoCurl调用http](#ufoCurl调用http)
 - [cacheMap内存缓存有效期数据](#cacheMap内存缓存有效期数据)
 - [文档](#文档)
 - [DEBUG](#DEBUG)
 
+
+### consul存储配置文件
+> consul配置文件以json格式存储,一般格式包括：
+
+```json
+{
+    "token": "xxx",
+    "type": "Web",
+    "name": "Web.sss",
+    "svc_url": "xxxx.xx.com",
+    "svc_port": 80,
+    "port": 3000,
+    "version": "v1",
+    "http" : {
+
+    },
+    "mysql":{
+
+    }
+}
+```
+
 ### 内置常用模块
 > 避免重复依赖，常用模块请使用ukoa提供的.
 ```js
-const {Ufo, Controller, Joi, lodash, moment, humps, curl, ufoCurl } = require('ukoa');
+const {Ufo, Controller, Joi, lodash, moment, humps, axios, curl, ufoCurl } = require('ukoa');
 ```
 
 ### 内置中间价
@@ -123,7 +147,9 @@ class Example extends Controller {
 
   // 执行函数体
   async main(ctx) {
-    return this.ok = {};
+    this.total = 0;                   // 数据总量，用于分页显示总量信息
+    return this.ok = {};              // 数据内容
+    return this.error = 'xxx error';         // 数据错误描述
   }
 }
 
@@ -131,8 +157,20 @@ module.exports = Example;
 
 ```
 
+### ufoCurl调用http
+> ufoCurl 提供http调用，将http结果剥离，形成 [Data, isError, Total] 模式
+```
+ctx.app.ufoCurl(url, entity, config, options);
+config = {
+  throw: false    // 是否有错误立马抛出
+  key: "Data"     // 结果key字符串为‘Data’,
+  total: "Total"  // 数量的字符串为‘Total’,
+  pick: []        // 结果为自己pick的内容
+}
+```
+
 ### cacheMap内存缓存有效期数据
-> 对于一些需要缓存在内存中、按时刷新的内容，可以使用cacheMap, 
+> 对于一些需要缓存在内存中、按时刷新的内容，可以使用cacheMap, 默认 60 * 1000 ms
 ```js
 module.exports = options => async (ctx, next) => {
   if (!ctx.cacheMap) ctx.cacheMap = ctx.app.cacheMap;
@@ -147,7 +185,7 @@ module.exports = options => async (ctx, next) => {
 // 使用
 await ctx.cacheMap.get('cacheBody') // hello world
 ```
-#### 文档
+### 文档
 * 在配置文件config中，应该指定doc_url, 文档目录为: http://docs.example.com/?__view_docs=true&Action=*
 * 在参数中指定 `__view_docs=true`, 即可获取API操作文档。
 * .mock 文件夹下创建 ${Action}.json 文件，作为文档 mock返回值

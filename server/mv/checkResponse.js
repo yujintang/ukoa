@@ -20,7 +20,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
     return;
   }
   if (Array.isArray(ctx.body)) {
-    const [data, err, count] = ctx.body;
+    const [data, err, total] = ctx.body;
     ctx.body = {
       Action: `${ctx.mergeParams.Action || ''}Response`,
       RetCode: err ? -1 : 0,
@@ -28,7 +28,7 @@ const checkResponse = (options = {}) => async (ctx, next) => {
       ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
       Message: err ? `${ctx.app.name} -> ${data}` : 'Ok!',
-      Total: Object.prototype.toString.apply(data) === '[object Array]' ? count || data.length : undefined,
+      Total: Object.prototype.toString.apply(data) === '[object Array]' ? total || data.length : undefined,
     };
   }
   if (typeof trigger === 'function') ctx.body = trigger(ctx.body);
