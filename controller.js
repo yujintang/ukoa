@@ -80,13 +80,13 @@ class Controller {
 
   /**
    * 返回体
-   * response {array} [data, err ] 第一个参数为是具体内容, 第二个参数为是否错误
+   * response {array} [ data, err, count ] 第一个参数为是具体内容, 第二个参数为是否错误, 第三个参数为数据数量
    */
   ctxBody() {
     if (this.error !== SymbolError) {
-      return [this.error, true];
+      return [this.error, true, this.count];
     }
-    return [this.ok, false];
+    return [this.ok, false, this.count];
   }
 }
 
