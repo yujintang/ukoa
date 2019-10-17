@@ -7,7 +7,7 @@ const os = require('os');
 const moment = require('moment');
 const { get } = require('lodash');
 
-const apiId = require('shortid').generate();
+const apiId = require('uuid').v4().split('-')[4].toUpperCase();
 
 const helper = require('./server/utils/helper');
 const CacheMap = require('./server/utils/cacheMap');

@@ -1,6 +1,6 @@
 {
   "name": "ukoa",
-  "version": "3.2.35",
+  "version": "3.2.36",
   "main": "index.js",
   "bin": {
     "lint": "./scripts/eslint.js",
