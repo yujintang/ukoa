@@ -22,8 +22,8 @@ module.exports = (enable = false, options = {}) => async(ufo) => {
     curl(url, {
       Action: 'Common.SaveAPPException',
       Token: token,
-      APP: ufo.name,
-      IP: ufo.ip,
+      APP: ufo.config.name || ufo.name,
+      IP: ufo.config.svc_url || ufo.ip,
       Info: data.stack || data,
     });
   };
