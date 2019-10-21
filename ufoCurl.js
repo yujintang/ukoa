@@ -12,6 +12,7 @@ const ufoCurl = async (url, entity, config = {}, options = {}) => {
     }
     return [get(data, key), false, get(data, total)];
   }
+  if (config.throw) throw new Error(data.Message);
   return [data.Message, true];
 };
 
