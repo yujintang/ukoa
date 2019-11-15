@@ -9,6 +9,7 @@ const curl = async (url, data, config = {}, options = {}) => {
       timeout: 60000,
       method: 'post',
       url,
+      headers: { 'Content-Type': 'application/json' },
       data,
     }, config);
     const debug = createDebug(`ufo:curl:${data.Action}`);
