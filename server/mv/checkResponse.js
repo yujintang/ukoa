@@ -20,14 +20,16 @@ const checkResponse = (options = {}) => async (ctx, next) => {
     return;
   }
   if (Array.isArray(ctx.body)) {
-    const [data, err, total] = ctx.body;
+    const [data, err, retOpt = {}] = ctx.body;
+    const { total = 0, prefix = true, retcode } = retOpt;
+    const prefixStr = prefix ? `${ctx.app.name} -> ` : '';
     ctx.body = {
       Action: `${ctx.mergeParams.Action || ''}Response`,
-      RetCode: err ? -1 : 0,
+      RetCode: err ? retcode || -1 : 0,
       TrackSN: ctx.mergeParams.TrackSN,
       ChainSN: ctx.mergeParams.ChainSN,
       Data: err ? {} : data,
-      Message: err ? `${ctx.app.name} -> ${data}` : 'Ok!',
+      Message: err ? `${prefixStr}${data}` : 'Ok!',
       Total: Object.prototype.toString.apply(data) === '[object Array]' ? total || data.length : undefined,
     };
   }

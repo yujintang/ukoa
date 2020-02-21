@@ -80,13 +80,21 @@ class Controller {
 
   /**
    * 返回体
-   * response {array} [ ok, error, count/total ] 第一个参数为是具体内容, 第二个参数为是否错误, 第三个参数为数据数量
+   * response {array} [ ok, error, retOpt ] 第一个参数为是具体内容, 第二个参数为是否错误, 第三个为集合参数
    */
   ctxBody() {
     if (this.error !== SymbolError) {
-      return [this.error, true, this.total || this.count];
+      return [this.error, true, {
+        total: this.total || this.count,
+        prefix: false,
+        retcode: -2,
+      }];
     }
-    return [this.ok, false, this.total || this.count];
+    return [this.ok, false, {
+      total: this.total || this.count,
+      prefix: true,
+      retcode: 0,
+    }];
   }
 }
 

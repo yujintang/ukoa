@@ -9,7 +9,12 @@ const dynamicAction = async (ctx) => {
     api.init(api.ctx, api.Joi);
     // 验证参数
     const validErr = api.validate();
-    if (validErr) return ctx.body = [validErr, true];
+    if (validErr) {
+      return ctx.body = [validErr, true, {
+        prefix: true,
+        retcode: -3,
+      }];
+    }
     // 执行函数体
     if (api.cache) {
       await api.cacheMain(api.ctx);
@@ -19,7 +24,10 @@ const dynamicAction = async (ctx) => {
     return ctx.body = api.ctxBody();
   } catch (err) {
     ctx.app.logger.error(err);
-    return ctx.body = [err.message, true];
+    return ctx.body = [err.message, true, {
+      prefix: true,
+      retcode: -5,
+    }];
   }
 };
 
