@@ -13,7 +13,7 @@ module.exports = () => async (ctx, next) => {
       Action: 'Common.SaveApiDocDemo',
       ApiName: `${nameSpace}.${body.Action}`,
       Token: token,
-      Input: omit(ctx.request.body, ['TrackSN', 'ChainSN', 'Token', 'SaveApiDemo']),
+      Input: omit(ctx.request.body, ['TrackSN', 'ChainSN', 'Token', 'SaveApiDemo', '__save_docs']),
       Output: omit(ctx.body, ['TrackSN', 'ChainSN']),
     });
   }
