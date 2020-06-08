@@ -69,6 +69,7 @@ class Ufo extends KoaApplication {
     this.use(require('./server/mv/appWithCtx')(options.appWithCtx)); // ctx.app.ctx 将每次ctx带入app中
     this.use(require('./server/mv/changeRoutePath')(options.changeRoutePath)); // 根据action改变路由
     this.use(require('./server/mv/mergeParams')(options.mergeParams)); // 合并参数
+    this.use(require('./server/mv/saveApiDemo')({})); // API Mock 数据保存
     this.use(require('./server/mv/internalCall')(options.internalCall)); // 内部调用
     this.use(require('./server/mv/checkResponse')(options.checkResponse)); // 检查参数
 
