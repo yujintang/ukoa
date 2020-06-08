@@ -188,7 +188,7 @@ await ctx.cacheMap.get('cacheBody') // hello world
 ### 文档
 * 在配置文件config中，应该指定doc_url, 文档目录为: http://docs.example.com/?__view_docs=true&Action=*
 * 在参数中指定 `__view_docs=true`, 即可获取API操作文档。
-* 请求参数添加 `"SaveApiDemo":true`, 即可保存API调用为文档。
+* 请求参数添加 `"__save_docs":true`, 即可保存API调用为文档。
 ```json
 {
   "doc_url": "http://docs.example.com/?__view_docs=true&Action="
