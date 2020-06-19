@@ -18,7 +18,11 @@ const docs = async (ctx) => {
     for (const i in actionObj) {
       const TempApi = ctx.app.apiMap.get(i);
       const tempApi = new TempApi(ctx);
-      tempApi.init(tempApi.ctx, tempApi.Joi);
+      try {
+        tempApi.init(tempApi.ctx, tempApi.Joi);
+      } catch (e) {
+        console.error(`Action=${i} Error! ${e.message}`);
+      }
       summary[`[${showDeprecated(tempApi.docs)}] ${actionObj[i].action} [${actionObj[i].desc}]`] = `${doc_url}${actionObj[i].action}`;
     }
     return ctx.body = summary;
@@ -31,17 +35,18 @@ const docs = async (ctx) => {
     let mockFile = {};
 
     const { url, token } = get(ctx.app.config, 'cache_api', {});
-    if (!url || !token) throw new Error('使用Cache必须配置{cache_api: {url, token}}');
-    const nameSpace = ctx.app.config.name || ctx.app.name;
-    const [data, err] = await curl(url, {
-      Action: 'Common.GetApiDocDemo',
-      ApiName: `${nameSpace}.${ctx.params.Action}`,
-      Token: token,
-    });
-    if (err || data.RetCode !== 0) {
-      mockFile = {};
-    } else {
-      mockFile = data.Data;
+    if (url && token) {
+      const nameSpace = ctx.app.config.name || ctx.app.name;
+      const [data, err] = await curl(url, {
+        Action: 'Common.GetApiDocDemo',
+        ApiName: `${nameSpace}.${ctx.params.Action}`,
+        Token: token,
+      });
+      if (err || data.RetCode !== 0) {
+        mockFile = {};
+      } else {
+        mockFile = data.Data;
+      }
     }
 
     return ctx.body = Object.assign({
