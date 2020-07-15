@@ -28,6 +28,12 @@ class Controller {
       stripUnknown: true,
     });
     if (error) return error.message;
+    // sql escape
+    for(const key of Object.keys(value)){
+      if(typeof value[key] === 'string'){
+        value[key] = escapeString(value[key])
+      }
+    }
     this.params = value;
     return false;
   }
