@@ -1,5 +1,6 @@
 const { get } = require('lodash');
 const curl = require('./curl');
+const escapeString = require('./server/utils/escape')
 
 const SymbolError = Symbol('error');
 const Joi = require('./joi');
