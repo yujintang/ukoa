@@ -1,6 +1,6 @@
 const { get } = require('lodash');
 const curl = require('./curl');
-const escapeString = require('./server/utils/escape')
+const escapeString = require('./server/utils/escape');
 
 const SymbolError = Symbol('error');
 const Joi = require('./joi');
@@ -30,9 +30,9 @@ class Controller {
     });
     if (error) return error.message;
     // sql escape
-    for(const key of Object.keys(value)){
-      if(typeof value[key] === 'string'){
-        value[key] = escapeString(value[key])
+    for (const key of Object.keys(value)) {
+      if (typeof value[key] === 'string') {
+        value[key] = escapeString(value[key]);
       }
     }
     this.params = value;

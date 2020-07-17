@@ -5,15 +5,15 @@
 /* eslint-disable no-multi-assign */
 const CHARS_GLOBAL_REGEXP = /[\0\b\t\n\r\x1a\"\'\\]/g;
 const CHARS_ESCAPE_MAP = {
-  '\0': '\\0',
-  '\b': '\\b',
-  '\t': '\\t',
-  '\n': '\\n',
-  '\r': '\\r',
-  '\x1a': '\\Z',
+  // '\0': '\\0',
+  // '\b': '\\b',
+  // '\t': '\\t',
+  // '\n': '\\n',
+  // '\r': '\\r',
+  // '\x1a': '\\Z',
   '"': '\\"',
   '\'': '\\\'',
-  '\\': '\\\\',
+  // '\\': '\\\\',
 };
 
 const result = (val, single_quota) => {
