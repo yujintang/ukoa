@@ -25,7 +25,7 @@ module.exports = (enable = false, options = {}) => async(ufo) => {
       check_rules: {
         id: ufo.apiId,
         name: ufo.config.name,
-        http: `http://${ufo.config.svc_url || ufo.ip}:${
+        http: ufo.config.heart_url || `http://${ufo.config.svc_url || ufo.ip}:${
           ufo.config.svc_port || ufo.config.port
         }/HeartBeat`,
         interval: '30s',
